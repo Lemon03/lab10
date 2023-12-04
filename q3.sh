@@ -1,13 +1,10 @@
 #!/bin/bash
 
-# Print the content type header
 echo "Content-type: text/plain"
-echo
+read POST_DATA
 
-# Get the JWT from the browser's cookie
-JWT_COOKIE=$(echo "${HTTP_COOKIE}" | grep -o 'd2lJWT=[^;]*' | cut -d '=' -f2)
+JWT_COOKIE=$(echo "$POST_DATA" | sed 's/JWT=//')
 
-# Function to validate the JWT
 validate_jwt() {
     local jwt=$1
 

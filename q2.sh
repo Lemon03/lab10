@@ -4,22 +4,10 @@ echo "Content-type: text/plain"
 
 read POST_DATA
 
-# Output raw POST data for debugging
-echo "Raw POST data: $POST_DATA"
-
-# URL-decode the data
 decoded_data=$(echo "$POST_DATA" | sed 's/+/ /g;s/%\(..\)/\\x\1/g;')
 
-# Output decoded POST data for debugging
-echo "Decoded POST data: $decoded_data"
-
-# Extract fields from the decoded data
 username=$(echo "$decoded_data" | grep -oE 'username=[^&]+' | cut -d '=' -f2)
 password=$(echo "$decoded_data" | grep -oE 'password=[^&]+' | cut -d '=' -f2)
-
-# Output extracted username and password for debugging
-echo "Username: $username"
-echo "Password: $password"
 
 
 if [ "$username" == "langara" ] && [ "$password" == "hello" ]; then
