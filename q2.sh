@@ -23,7 +23,7 @@ if [ "$username" == "langara" ] && [ "$password" == "hello" ]; then
     JWT="${B64_HEADER}.${B64_PAYLOAD}.${SIGNATURE}"
 
     echo "Content-type: text/plain"
-    echo "Set-Cookie: JWT=$JWT; Path=/; HttpOnly"
+    echo "Set-Cookie: JWT=$JWT; Path=/;"
     echo ""
     echo "Status: 200 OK"
     echo "Login successful."
