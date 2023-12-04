@@ -2,8 +2,11 @@
 
 CONTENT_LENGTH=$(printf '%d' "$CONTENT_LENGTH")
 
+POST_DATA=""
 if [ $CONTENT_LENGTH -gt 0 ]; then
-    read -n $CONTENT_LENGTH POST_DATA
+    while IFS= read -r line; do
+        POST_DATA="$POST_DATA$line"
+    done
 fi
 
 decoded_data=$(echo "$POST_DATA" | sed 's/+/ /g;s/%\(..\)/\\x\1/g;')
@@ -38,7 +41,9 @@ else
     echo ""
     echo "Status: 401 Unauthorized"
     echo "Invalid credentials."
+    echo "Debug: Starting script" >&2
 fi
+
 
 
 
