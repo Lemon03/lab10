@@ -18,8 +18,8 @@
                 .then(data => {
                     if (data.includes("Login successful")) {
                         showPopup();
-                    } else {
-                        showPopup2()
+                    } else if (data.includes("Invalid credentials")) {
+                        showPopup2();
                     }
                 });
             });

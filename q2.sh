@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo "Content-type: text/plain"
-
 read POST_DATA
 
 decoded_data=$(echo "$POST_DATA" | sed 's/+/ /g;s/%\(..\)/\\x\1/g;')
@@ -26,8 +24,12 @@ if [ "$username" == "langara" ] && [ "$password" == "hello" ]; then
     # Complete JWT
     JWT="${B64_HEADER}.${B64_PAYLOAD}.${SIGNATURE}"
 
-    # Set the JWT in a cookie
+    # Send headers
+    echo "Content-type: text/plain"
     echo "Set-Cookie: JWT=$JWT; Path=/; HttpOnly"
+    echo ""
+
+    # Send body
     echo "Status: 200 OK"
     echo "Login successful."
 else
