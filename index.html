@@ -30,26 +30,29 @@
             });
         });
 
-        var checkCookieButton = document.getElementById('check-cookie');
-        if (checkCookieButton) {
-            checkCookieButton.addEventListener('click', function(event) {
-                console.log("button click")
-            fetch("./q3.sh", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                credentials: 'include'  
-            })
-            .then(response => response.text())
-            .then(data => {
-                if (data.includes("Valid JWT provided")) {
-                    document.getElementById('jwt-status').innerText = "Status: 200 OK: Having valid JWT in cookie";
-                } else {
-                    document.getElementById('jwt-status').innerText = "Status: 401 Unauthorized: No valid JWT in cookie";
-                }
-            });
-        })};
+        function attachCheckCookieListener() {
+            var checkCookieButton = document.getElementById('check-cookie');
+            if (checkCookieButton) {
+                checkCookieButton.addEventListener('click', function(event) {
+                    console.log("button click");
+                    fetch("./q3.sh", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        credentials: 'include'  
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        if (data.includes("Valid JWT provided")) {
+                            document.getElementById('jwt-status').innerText = "Status: 200 OK: Having valid JWT in cookie";
+                        } else {
+                            document.getElementById('jwt-status').innerText = "Status: 401 Unauthorized: No valid JWT in cookie";
+                        }
+                    });
+                })
+            };
+        }
 
 
         function getCookie(name) {
@@ -63,6 +66,7 @@
         function showPopup() {
             const popup = document.getElementById('login-success-popup');
             popup.style.display = 'block';
+            attachCheckCookieListener();
         }
 
         function showPopup2() {
