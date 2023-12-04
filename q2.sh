@@ -3,15 +3,8 @@
 CONTENT_LENGTH=$(printf '%d' "$CONTENT_LENGTH")
 
 POST_DATA=""
-if [ $CONTENT_LENGTH -gt 0 ]; then
-    while IFS= read -r line; do
-        POST_DATA="$POST_DATA$line"
-    done
-fi
-
-POST_DATA=""
-if [ $CONTENT_LENGTH -gt 0 ]; then
-    IFS= read -r -d '' -n "$CONTENT_LENGTH" POST_DATA
+if [ "$CONTENT_LENGTH" -gt 0 ]; then
+    POST_DATA=$(cat)
 fi
 
 decoded_data=$(echo "$POST_DATA" | sed 's/+/ /g;s/%\(..\)/\\x\1/g;')
