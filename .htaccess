@@ -1,2 +1,3 @@
 Options +ExecCGI
 AddHandler cgi-script .sh
+Require all granted
