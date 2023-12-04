@@ -9,15 +9,17 @@ if [ $CONTENT_LENGTH -gt 0 ]; then
     done
 fi
 
+POST_DATA=""
+if [ $CONTENT_LENGTH -gt 0 ]; then
+    IFS= read -r -d '' -n "$CONTENT_LENGTH" POST_DATA
+fi
+
 decoded_data=$(echo "$POST_DATA" | sed 's/+/ /g;s/%\(..\)/\\x\1/g;')
+echo "Raw POST data: $POST_DATA" >&2
 echo "Decoded POST data: $decoded_data" >&2
 
 username=$(echo "$decoded_data" | grep -oE 'username=[^&]+' | cut -d '=' -f2)
 password=$(echo "$decoded_data" | grep -oE 'password=[^&]+' | cut -d '=' -f2)
-
-# Debugging: Output username and password
-echo "Username: $username" >&2
-echo "Password: $password" >&2
 
 if [ "$username" == "langara" ] && [ "$password" == "hello" ]; then
     HEADER='{"alg":"HS256","typ":"JWT"}'
