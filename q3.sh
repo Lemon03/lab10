@@ -5,7 +5,6 @@ echo ""
 POST_DATA=$(cat)
 echo "POST Data: $POST_DATA" 
 JWT_COOKIE=$(echo "$POST_DATA" | sed 's/JWT=//')
-echo $JWT_COOKIE
 
 validate_jwt() {
     local jwt=$1

@@ -6,12 +6,12 @@
     <title>Lab 10</title>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            var form = document.querySelector("form");
+            const form = document.querySelector("form");
             form.addEventListener("submit", function(event) {
                 event.preventDefault();
-                var username = document.getElementById("username").value;
-                var password = document.getElementById("password").value;
-                var urlEncodedData = "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password);
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+                const urlEncodedData = "username=" + encodeURIComponent(username) + "&password=" + encodeURIComponent(password);
                 fetch("./q2.sh", {
                     method: "POST",
                     headers: {
@@ -31,25 +31,33 @@
         });
 
         function attachCheckCookieListener() {
-            var checkCookieButton = document.getElementById('check-cookie');
+            const checkCookieButton = document.getElementById('check-cookie');
             if (checkCookieButton) {
                 checkCookieButton.addEventListener('click', function(event) {
                     console.log("button click");
-                    fetch("./q3.sh", {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        credentials: 'include'  
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                        if (data.includes("Valid JWT provided")) {
-                            document.getElementById('jwt-status').innerText = "Status: 200 OK: Having valid JWT in cookie";
-                        } else {
-                            document.getElementById('jwt-status').innerText = "Status: 401 Unauthorized: No valid JWT in cookie";
-                        }
-                    });
+                    const jwtCookie = getCookie('JWT'); 
+                    console.log("JWT COOKIE:", jwtCookie);
+
+                    if (jwtCookie) {
+                        fetch("./q3.sh", {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            credentials: 'include',
+                            body: 'JWT=' + encodeURIComponent(jwtCookie) // Include JWT cookie in the request body
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            if (data.includes("Valid JWT provided")) {
+                                document.getElementById('jwt-status').innerText = "Status: 200 OK: Having valid JWT in cookie";
+                            } else {
+                                document.getElementById('jwt-status').innerText = "Status: 401 Unauthorized: No valid JWT in cookie";
+                            }
+                        });
+                    } else {
+                        console.log("JWT cookie not found");
+                    }
                 })
             };
         }
