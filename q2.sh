@@ -1,17 +1,44 @@
 #!/bin/bash
 
-# Read POST data
-POST_DATA=$(cat)
+CONTENT_LENGTH=$(printf '%d' "$CONTENT_LENGTH")
 
-# Extract boundary from CONTENT_TYPE environment variable
-BOUNDARY=$(echo $CONTENT_TYPE | sed 's/.*boundary=\(.*\)/\1/')
+if [ $CONTENT_LENGTH -gt 0 ]; then
+    read -n $CONTENT_LENGTH POST_DATA
+fi
 
-# Process POST data to extract username and password
-username=$(echo "$POST_DATA" | awk -v RS="--$BOUNDARY" '/name="username"/ {getline; getline; print}' | tr -d '\r')
-password=$(echo "$POST_DATA" | awk -v RS="--$BOUNDARY" '/name="password"/ {getline; getline; print}' | tr -d '\r')
+decoded_data=$(echo "$POST_DATA" | sed 's/+/ /g;s/%\(..\)/\\x\1/g;')
 
-# Output the parsed data
-echo "Content-type: text/plain"
-echo ""
-echo "Username: $username"
-echo "Password: $password"
+username=$(echo "$decoded_data" | grep -oE 'username=[^&]+' | cut -d '=' -f2)
+password=$(echo "$decoded_data" | grep -oE 'password=[^&]+' | cut -d '=' -f2)
+
+
+if [ "$username" == "langara" ] && [ "$password" == "hello" ]; then
+    HEADER='{"alg":"HS256","typ":"JWT"}'
+    PAYLOAD="{\"username\":\"$username\",\"exp\":\"$(( $(date +%s) + 3600 ))\"}"
+
+    # Encode Header and Payload
+    B64_HEADER=$(echo -n "$HEADER" | base64 | tr '+' '-' | tr '/' '_' | tr -d '=')
+    B64_PAYLOAD=$(echo -n "$PAYLOAD" | base64 | tr '+' '-' | tr '/' '_' | tr -d '=')
+
+    # Signature
+    SIGNATURE=$(echo -n "${B64_HEADER}.${B64_PAYLOAD}" \
+        | openssl dgst -sha256 -hmac "your_secret_key" -binary \
+        | base64 | tr '+' '-' | tr '/' '_' | tr -d '=')
+
+    # Complete JWT
+    JWT="${B64_HEADER}.${B64_PAYLOAD}.${SIGNATURE}"
+
+    echo "Content-type: text/plain"
+    echo "Set-Cookie: JWT=$JWT; Path=/; HttpOnly"
+    echo ""
+    echo "Status: 200 OK"
+    echo "Login successful."
+else
+    echo "Content-type: text/plain"
+    echo ""
+    echo "Status: 401 Unauthorized"
+    echo "Invalid credentials."
+fi
+
+
+
