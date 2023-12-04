@@ -30,7 +30,9 @@
             });
         });
 
-        document.getElementById('check-cookie').addEventListener('click', function(event) {
+        var checkCookieButton = document.getElementById('check-cookie');
+        if (checkCookieButton) {
+            checkCookieButton.addEventListener('click', function(event) {
             fetch("./q3.sh", {
                 method: "POST",
                 headers: {
@@ -46,7 +48,7 @@
                     document.getElementById('jwt-status').innerText = "Status: 401 Unauthorized: No valid JWT in cookie";
                 }
             });
-        });
+        })};
 
 
         function getCookie(name) {
