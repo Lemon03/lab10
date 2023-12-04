@@ -33,6 +33,7 @@
         var checkCookieButton = document.getElementById('check-cookie');
         if (checkCookieButton) {
             checkCookieButton.addEventListener('click', function(event) {
+                console.log("button click")
             fetch("./q3.sh", {
                 method: "POST",
                 headers: {
