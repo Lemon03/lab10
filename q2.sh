@@ -10,10 +10,14 @@ if [ $CONTENT_LENGTH -gt 0 ]; then
 fi
 
 decoded_data=$(echo "$POST_DATA" | sed 's/+/ /g;s/%\(..\)/\\x\1/g;')
+echo "Decoded POST data: $decoded_data" >&2
 
 username=$(echo "$decoded_data" | grep -oE 'username=[^&]+' | cut -d '=' -f2)
 password=$(echo "$decoded_data" | grep -oE 'password=[^&]+' | cut -d '=' -f2)
 
+# Debugging: Output username and password
+echo "Username: $username" >&2
+echo "Password: $password" >&2
 
 if [ "$username" == "langara" ] && [ "$password" == "hello" ]; then
     HEADER='{"alg":"HS256","typ":"JWT"}'
