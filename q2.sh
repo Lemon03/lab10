@@ -1,5 +1,6 @@
 #!/bin/bash
 
+POST_DATA=$(cat)
 echo "Content-type: text/plain"
 echo ""
-echo "Hello, CGI Script!"
+echo "POST Data: $POST_DATA"
