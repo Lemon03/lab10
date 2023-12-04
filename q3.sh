@@ -3,6 +3,8 @@
 echo "Content-type: text/plain"
 POST_DATA=$(cat)
 JWT_COOKIE=$(echo "$POST_DATA" | sed 's/JWT=//')
+echo $POST_DATA
+echo $JWT_COOKIE
 
 validate_jwt() {
     local jwt=$1
