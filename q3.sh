@@ -1,8 +1,7 @@
 #!/bin/bash
 
 echo "Content-type: text/plain"
-read POST_DATA
-
+POST_DATA=$(cat)
 JWT_COOKIE=$(echo "$POST_DATA" | sed 's/JWT=//')
 
 validate_jwt() {

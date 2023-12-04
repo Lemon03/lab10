@@ -30,28 +30,23 @@
             });
         });
 
-        function checkLogin() {
-            const jwt = getCookie('JWT');
-            if (jwt) {
-                fetch("./q3.sh", {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'JWT=' + jwt
-                })
-                .then(response => response.text())
-                .then(data => {
-                    if (data.includes("Valid JWT provided")) {
-                        document.getElementById('jwt-status').innerText = "Status: 200 OK: Having valid JWT in cookie";
-                    } else {
-                        document.getElementById('jwt-status').innerText = "Status: 401 Unauthorized: No valid JWT in cookie";
-                    }
-                });
-            } else {
-                document.getElementById('jwt-status').innerText = "Status: 401 Unauthorized: No valid JWT in cookie";
-            }
-        }
+        document.getElementById('check-cookie').addEventListener('click', function(event) {
+            fetch("./q3.sh", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                credentials: 'include'  
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.includes("Valid JWT provided")) {
+                    document.getElementById('jwt-status').innerText = "Status: 200 OK: Having valid JWT in cookie";
+                } else {
+                    document.getElementById('jwt-status').innerText = "Status: 401 Unauthorized: No valid JWT in cookie";
+                }
+            });
+        });
 
 
         function getCookie(name) {
@@ -108,7 +103,7 @@
             border-radius: 4px;
         }
 
-        .form-group button, #check-cookie {
+        .form-group button {
             width: 100%;
             padding: 10px;
             background-color: #0056b3;
@@ -173,7 +168,7 @@
                 <p style="font-weight: bold">Password: hello</p>
             </div>
         </form>
-        <button id="check-cookie" onclick="checkLogin()">Call q3.sh</button>
+        <button id="check-cookie">Call q3.sh</button>
         <div id="jwt-status"></div>
     </div>
 
@@ -181,7 +176,7 @@
         <div id="login-success-popup2">
             <h1>Congratulations: Login successfully</h1>
             <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=eA-guVdXy-3zUF5L&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>    
-            <button id="check-cookie" onclick="checkLogin()">Call q3.sh</button>
+            <button id="check-cookie">Call q3.sh</button>
             <div id="jwt-status"></div>
         </div>
     </div>
