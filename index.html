@@ -19,7 +19,7 @@
                     if (data.includes("Login successful")) {
                         showPopup();
                     } else {
-                        alert("Invalid credentials");
+                        showPopup2()
                     }
                 });
             });
@@ -42,6 +42,11 @@
 
         function showPopup() {
             const popup = document.getElementById('login-success-popup');
+            popup.style.display = 'block';
+        }
+
+        function showPopup2() {
+            const popup = document.getElementById('login-unsuccess-popup');
             popup.style.display = 'block';
         }
 
@@ -93,7 +98,7 @@
             display: flex;
             justify-content: space-between;
         }
-        #login-success-popup {
+        #login-success-popup, #login-unsuccess-popup {
             position: fixed;
             top: 0;
             left: 0;
@@ -103,18 +108,18 @@
             z-index: 999; 
         }
 
-        #login-success-popup2{
+        #login-success-popup2, #login-unsuccess-popup2 {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
         }
 
-        #login-success-popup h1 {
+        #login-success-popup h1, #login-unsuccess-popup h1 {
             color: #fff;
         }
 
-        #login-success-popup iframe {
+        #login-success-popup iframe, #login-unsuccess-popup iframe {
             margin-top: 20px;
         }
     </style>
@@ -146,7 +151,12 @@
             <h1>Congratulations: Login successfully</h1>
             <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=eA-guVdXy-3zUF5L&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>    
         </div>
-        
+    </div>
+
+    <div id="login-unsuccess-popup" style="display:none;">
+        <div id="login-unsuccess-popup2">
+            <h1>Sorry: maybe try it again</h1>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/84Vi1Mbhzsw?si=1-jP60u3nqPgLjFV&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>        </div>
     </div>
 
 </body>
