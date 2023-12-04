@@ -1,27 +1,10 @@
 #!/bin/bash
 
-CONTENT_LENGTH=$(printf '%d' "$CONTENT_LENGTH")
+POST_DATA=$(cat)
 
-POST_DATA=""
-if [ "$CONTENT_LENGTH" -gt 0 ]; then
-    POST_DATA=$(cat)
-fi
-
-BOUNDARY=$(echo $CONTENT_TYPE | sed 's/.*boundary=\(.*\)/\1/')
-
-username=""
-password=""
-
-# Process POST data to extract username and password
-while IFS= read -r line; do
-    if [[ "$line" == *'name="username"'* ]]; then
-        IFS= read -r line
-        username=$(echo "$line" | tr -d '\r')
-    elif [[ "$line" == *'name="password"'* ]]; then
-        IFS= read -r line
-        password=$(echo "$line" | tr -d '\r')
-    fi
-done <<< "$(echo "$POST_DATA" | tr '\n' '\r' | sed -n -e "s/--$BOUNDARY/\n/gp" | tr '\r' '\n')"
+decoded_data=$(echo "$POST_DATA" | sed 's/+/ /g;s/%\(..\)/\\x\1/g;')
+username=$(echo "$decoded_data" | grep -oE 'username=[^&]+' | cut -d '=' -f2)
+password=$(echo "$decoded_data" | grep -oE 'password=[^&]+' | cut -d '=' -f2)
 
 if [ "$username" == "langara" ] && [ "$password" == "hello" ]; then
     HEADER='{"alg":"HS256","typ":"JWT"}'
