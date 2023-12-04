@@ -94,24 +94,16 @@
             justify-content: space-between;
         }
         #login-success-popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5); 
             display: flex;
             justify-content: center;
             align-items: center;
+            background: rgba(0, 0, 0, 0.5); 
             flex-direction: column;
             z-index: 999; 
         }
 
         #login-success-popup h1 {
-            background: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            color: #fff;
         }
 
         #login-success-popup iframe {
@@ -143,7 +135,7 @@
 
     <div id="login-success-popup" style="display:none;">
         <h1>Congratulations: Login successfully</h1>
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen autoplay></iframe>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=eA-guVdXy-3zUF5L&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>    
     </div>
 
 </body>
