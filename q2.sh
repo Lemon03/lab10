@@ -7,6 +7,8 @@ decoded_data=$(echo "$POST_DATA" | sed 's/+/ /g;s/%\(..\)/\\x\1/g;')
 username=$(echo "$decoded_data" | grep -oE 'username=[^&]+' | cut -d '=' -f2)
 password=$(echo "$decoded_data" | grep -oE 'password=[^&]+' | cut -d '=' -f2)
 
+header="Content-type: text/plain"
+body=""
 
 if [ "$username" == "langara" ] && [ "$password" == "hello" ]; then
     HEADER='{"alg":"HS256","typ":"JWT"}'
@@ -24,15 +26,11 @@ if [ "$username" == "langara" ] && [ "$password" == "hello" ]; then
     # Complete JWT
     JWT="${B64_HEADER}.${B64_PAYLOAD}.${SIGNATURE}"
 
-    # Send headers
-    echo "Content-type: text/plain"
-    echo "Set-Cookie: JWT=$JWT; Path=/; HttpOnly"
-    echo ""
+    header="$header\nSet-Cookie: JWT=$JWT; Path=/; HttpOnly"
 
-    # Send body
-    echo "Status: 200 OK"
-    echo "Login successful."
+    body="Status: 200 OK\nLogin successful."
 else
-    echo "Status: 401 Unauthorized"
-    echo "Invalid credentials."
+    body="Status: 401 Unauthorized\nInvalid credentials."
 fi
+
+echo -e "$header\n$body"
